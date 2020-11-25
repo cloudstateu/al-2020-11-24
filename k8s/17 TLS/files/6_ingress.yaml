@@ -1,0 +1,24 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-cm
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/issuer: selfsigned-issuer
+    nginx.ingress.kubernetes.io/send_timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "240"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "240"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "240"
+spec:
+  tls:
+  - secretName: my-selfsigned-cert
+    hosts:
+    - k.pm.cloudemo.eu
+  rules:
+   - host: k.pm.cloudemo.eu
+     http:
+      paths:
+        - path: /cm
+          backend:
+            serviceName: tls-nginx
+            servicePort: 80
